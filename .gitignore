@@ -2,3 +2,4 @@ bin/
 result.txt
 .claude/
 .vscode/
+*.txt
