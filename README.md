@@ -5,6 +5,8 @@ A simple command-line tool that continuously queries DNS hosts and tracks unique
 ## Features
 
 - Query DNS hosts at regular intervals
+- Bypass OS DNS cache for fresh results
+- Filter by IP type (IPv4, IPv6, or both)
 - Track and save unique IP addresses to file
 - Cross-platform support (Linux, macOS, Windows)
 - Built-in deduplication
@@ -13,7 +15,7 @@ A simple command-line tool that continuously queries DNS hosts and tracks unique
 ## Usage
 
 ```bash
-./autoDnsQuery -host example.com -interval 10 -output results.txt
+./autoDnsQuery -host example.com -interval 10 -output results.txt -mode both
 ```
 
 ### Options
@@ -21,6 +23,7 @@ A simple command-line tool that continuously queries DNS hosts and tracks unique
 - `-host` - DNS hostname to query (required)
 - `-interval` - Query interval in seconds (default: 5)
 - `-output` - Output file for IP addresses (default: result.txt)
+- `-mode` - IP mode: "ipv4", "ipv6", or "both" (default: ipv4)
 
 ## Building
 
@@ -44,11 +47,11 @@ make darwin     # macOS binary
 ## Example
 
 ```bash
-$ ./bin/autoDnsQuery -host google.com -interval 5
+$ ./bin/autoDnsQuery -host google.com -interval 5 -mode both
 Querying google.com every 5 seconds...
  New IP found: 142.250.191.14 (total: 1)
  New IP found: 2607:f8b0:4004:c1b::65 (total: 2)
 IP already recorded: 142.250.191.14
 ```
 
-The tool will continuously monitor the specified host and save all unique IP addresses to the output file.
+The tool bypasses OS DNS cache and will continuously monitor the specified host, saving all unique IP addresses to the output file with fresh DNS lookups.

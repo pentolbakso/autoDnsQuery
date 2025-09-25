@@ -9,8 +9,9 @@ This is a simple Go command-line tool that performs DNS queries at regular inter
 ## Architecture
 
 The application consists of a single `main.go` file with these key components:
-- Command-line argument parsing using Go's `flag` package
-- DNS resolution using `net.LookupIP()`
+- Command-line argument parsing using Go's `flag` package  
+- DNS resolution using custom `net.Resolver` with `PreferGo: true` to bypass OS DNS cache
+- IP filtering by type (IPv4/IPv6) using `ip.To4() != nil`
 - IP deduplication using an in-memory map
 - File I/O for persisting and loading IP addresses
 
@@ -47,8 +48,9 @@ The tool accepts these command-line arguments:
 - `-host` (required): DNS hostname to query
 - `-interval` (default: 5): Query interval in seconds  
 - `-output` (default: "result.txt"): Output file for IP addresses
+- `-mode` (default: "ipv4"): IP mode - "ipv4", "ipv6", or "both"
 
-The application continuously queries the specified host, tracks unique IP addresses in memory, and appends new IPs to the output file. It uses `log.Printf` for all output with emoji indicators (✅ for new IPs, ❌ for errors).
+The application continuously queries the specified host using a custom DNS resolver that bypasses OS DNS cache, tracks unique IP addresses in memory, and appends new IPs to the output file. It uses `log.Printf` for all output with emoji indicators (✅ for new IPs, ❌ for errors).
 
 ## Code Style Notes
 

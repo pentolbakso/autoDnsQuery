@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"flag"
 	"log"
 	"net"
@@ -34,12 +35,19 @@ func main() {
 
 	existingIPs := loadExistingIPs(outputFile)
 
+	// Create custom resolver to bypass OS DNS cache
+	resolver := &net.Resolver{
+		PreferGo: true,
+		Dial:     nil,
+	}
+
 	for {
-		ips, err := net.LookupIP(host)
+		ipAddrs, err := resolver.LookupIPAddr(context.Background(), host)
 		if err != nil {
 			log.Printf("❌ DNS lookup failed: %v", err)
 		} else {
-			for _, ip := range ips {
+			for _, ipAddr := range ipAddrs {
+				ip := ipAddr.IP
 				ipStr := ip.String()
 				
 				// Filter based on mode
